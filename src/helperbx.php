@@ -46,6 +46,31 @@ class HelperBX {
             $APPLICATION->SetPageProperty("description", $seoProps['SECTION_META_DESCRIPTION']);
         }
     }
+    
+    public static function getELementsByDate() {
+        $i = 1; // за сколько дней вывести данные
+
+        $s1 = strtotime("-$i day");
+        $s2 = strtotime("today");
+
+        echo("от " . date('d.m.Y', $s1)."\n");
+        echo("до " . date('d.m.Y  H:i:s', $s2)."\n");
+
+        $filter = array(
+            //"ID"=> 22515,
+           ">UF_PASS_CHANGE_DATE" => date('d.m.Y', $s1),
+           "ACTIVE" => 'Y',
+        );
+
+        $elementsResult = CUser::GetList(($by="ID"), ($order="ASC"), $filter,array("SELECT"=>array(
+            "UF_PASS_REAL", 
+            "UF_PASS_CHANGE_DATE")
+            ));
+        while ($rsUser = $elementsResult->Fetch()) 
+        {
+            echo $rsUser["ID"] . " - " . $rsUser["LOGIN"] . " - " . $rsUser["UF_PASS_CHANGE_DATE"] . "\n";
+        }
+    }
 }
 
 ?>
