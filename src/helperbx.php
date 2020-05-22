@@ -71,6 +71,43 @@ class HelperBX {
             echo $rsUser["ID"] . " - " . $rsUser["LOGIN"] . " - " . $rsUser["UF_PASS_CHANGE_DATE"] . "\n";
         }
     }
+    
+    function getIBlockIdByCode($sIBlockCode, $bRefreshCache = false)
+{
+
+	$arIblocks = array();
+
+	if (array_key_exists($sIBlockCode, $arIblocks)) {
+		return $arIblocks[$sIBlockCode];
+	}
+
+
+	$obCache = new CPHPCache;
+	$iReturnId = 0;
+	$CACHE_ID = 'getIBlockIdByCode' . $sIBlockCode . '_______';
+	$iCacheTime = 10800; //3 часа
+
+	if ($obCache->StartDataCache($iCacheTime, $CACHE_ID)):
+
+		if (CModule::IncludeModule('iblock')) {
+			$arFilter = array(
+				'CODE' => $sIBlockCode,
+				'ACTIVE' => 'Y',
+				'CHECK_PERMISSIONS' => 'N'
+			);
+			$dbItems = CIBlock::GetList(array('ID' => 'ASC'), $arFilter, false);
+			if ($arItem = $dbItems->Fetch()) {
+				$iReturnId = intval($arItem['ID']);
+			}
+		}
+
+		$obCache->EndDataCache($iReturnId);
+	else:
+		$iReturnId = $obCache->GetVars();
+	endif;
+	unset($obCache);
+	return $iReturnId;
+}
 }
 
 ?>
