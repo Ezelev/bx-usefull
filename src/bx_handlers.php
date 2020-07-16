@@ -1,3 +1,4 @@
+<?
 // при изменений пароля
 AddEventHandler("main", "OnAfterUserUpdate", Array("SendPassword", "onBeforeUserChangePassword"));
 class PasswordUpdater 
