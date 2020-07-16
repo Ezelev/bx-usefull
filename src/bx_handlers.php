@@ -8,3 +8,16 @@ class PasswordUpdater
         // TODO
     }
 }
+
+// закрыть сайт для всех кроме определенных групп пользователей
+AddEventHandler("main", "OnProlog", "CloseAccessForGroup");
+function CloseAccessForGroup()
+{
+    global $USER, $APPLICATION;
+    $mas = $USER->GetUserGroupArray();
+    $id = $USER->GetID();
+    if(($id != 1 && $id != 2) && $APPLICATION->GetCurPage(false) != '/bitrix/admin/') {
+        require($_SERVER["DOCUMENT_ROOT"]."/local/php_interface/s1/site_closed.php");
+        die;
+    }
+}
