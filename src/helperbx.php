@@ -108,6 +108,24 @@ class HelperBX {
 	unset($obCache);
 	return $iReturnId;
 }
-}
+	
+	function getElementFilledProps() {
+		CModule::IncludeModule("iblock");
+		$IBLOCK_ID = "some id";
+		$arSelect = Array("ID", "IBLOCK_ID", "NAME", "DATE_ACTIVE_FROM");
+		$arFilter = Array("IBLOCK_ID"=>IntVal($IBLOCK_ID), "ACTIVE_DATE"=>"Y", "ACTIVE"=>"Y");
+		$res = CIBlockElement::GetList(Array(), $arFilter, false, Array("nPageSize"=>1), $arSelect);
+		while($ob = $res->GetNextElement())
+		{ 
+		$arProps = $ob->GetProperties();
+		foreach($arProps as $key=>$value) {
+			if(empty($value["VALUE"])) {
+					unset($arProps[$key]);
+				}
+			}
+		}
+
+		return $arProps;
+	}
 
 ?>
