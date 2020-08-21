@@ -127,5 +127,20 @@ class HelperBX {
 
 		return $arProps;
 	}
+	public static function getPayerEmailFromOrders(){
+		CModule::IncludeModule("sale");
+		$rsSales = CSaleOrder::GetList(array("DATE_INSERT" => "ASC"));
+		$payerEmails = [];
+		while ($arSales = $rsSales->Fetch())
+		{
+			$res = CSaleOrderPropsValue::GetOrderProps($arSales["ID"]);
+			while ($row = $res->fetch()) {
+				if ($row['IS_EMAIL']=='Y' && check_email($row['VALUE'])) {
+					$payerEmails[] = $row['VALUE'];
+				}
+			}
+		}
 
+		return $payerEmails;
+	}
 ?>
