@@ -143,4 +143,22 @@ class HelperBX {
 
 		return $payerEmails;
 	}
+	
+	public static function getIblockList() {
+		$res = \CIBlock::GetList(
+		    Array(), 
+		    Array(
+			'TYPE'=>'<your_iblock_type>', 
+			'SITE_ID'=>'<your_site_id>', 
+			'ACTIVE'=>'Y', 
+		    ), true
+		);
+
+		$iblocks = [];
+		while($ar_res = $res->Fetch())
+		{
+		    $iblocks[] = $ar_res;
+		}
+		return $iblocks;
+    	}
 ?>
