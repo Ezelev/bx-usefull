@@ -88,4 +88,26 @@ class YaDisk {
             }
         } 
     }
+    
+    public function getAuthLink() {
+     
+        session_start();
+
+         $clientId     = 'xxx';
+         $clientSecret = 'xxxx';
+         $redirectUri  = 'http://xxxxx/_dev/xxxx.php'; // callback url
+
+         // Формируем ссылку для авторизации
+         $params = array(
+             'client_id'     => $clientId,
+             'redirect_uri'  => $redirectUri,
+             'response_type' => 'code',
+             'scope'         => 'cloud_api:disk.app_folder cloud_api:disk.read cloud_api:disk.write cloud_api:disk.info',
+         );
+
+         $requestPath = "https://oauth.yandex.ru/authorize?" . http_build_query( $params ) ;
+         //echo  $requestPath;
+         $response = file_get_contents($requestPath);
+         return $response;
+    }
 }
